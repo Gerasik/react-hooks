@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // class InputComponent extends Component {
 
@@ -43,25 +43,35 @@ import React, { useState, useEffect } from 'react';
 
 function InputComponent({id, removeInput}){
     const [value, setValue] = useState('Value');
-    const [color, setColor] = useState('#ffffff')
+    const [color, setColor] = useState('#ffffff');
+    const el = useRef(null)
     useEffect(() => {
         if(id % 3 === 0 ){
             setColor(prompt('New background-color:', color));
         }
-    }, [color])
-
-    useEffect(() => {
+        el.current.focus();
         return () => {
             alert(`The input with "${value}" text has been deleted`)
         }
-    }, [id, value])
+    }, [color, id, value])
 
-    const updateInput = event => setValue(event.target.value);
+    // useEffect(() => {
+    //     return () => {
+    //         alert(`The input with "${value}" text has been deleted`)
+    //     }
+    // }, [value])
+
+    // const updateInput = event => setValue(event.target.value);
+
+    // function updateInput(event){
+    //     setValue(event.target.value)
+    // }
+
     console.log()
     return (
         <li>
             <p>{value}</p>
-            <input style={{backgroundColor: color}} type="text" value={value} onChange={updateInput}/>
+            <input ref={el} style={{backgroundColor: color}} type="text" value={value} onChange={event => setValue(event.target.value)}/>
             <button onClick={() => removeInput(id)}>remove input</button>  
         </li>
     )
